@@ -23,12 +23,11 @@
 	<body style="height:100%;width:100%" ng-app="OnARoll" ng-controller="OnARollController">
 		<!--REUSABLE NG-IF BASED DIALOG FOR POPUPS -->
 		<div style="width: 100%;height: 100%;z-index: 100;position: absolute;top: 0%;left: 0%;" ng-show="showPopup">
-			<div style="width: 100%;height: 100%;filter:blur(2px);z-index: 101;position: absolute;left: 0%;top: 0%;"></div>
 			<div style="z-index: 102;width: 80%;height: 80%;margin-left: 10%;margin-right:10%;position: absolute;top: 9%;left: 0%;border-radius: 25px;border: solid slategrey 4px; background-image: linear-gradient(white, seashell);">
 				POPUP
 			</div>
 		</div>
-		<div style="width:100%;height:100%" >			
+		<div style="width:100%;height:100%" ng-style="{'filter': showPopup ? 'blur(2px)' : 'none'}">			
 			<!--LOGIN PAGE -->	
 			<div style="width:100%;background-image: linear-gradient(seashell, white);height:100%" ng-if="!loggedIn">
 				<div style="position:absolute;top: 3% ;text-align:center;font-family: 'Courier New', Courier, monospace;font-size: 28pt;font-weight: 700;width:100%">On-A-Roll</div>
