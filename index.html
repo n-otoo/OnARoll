@@ -20,23 +20,43 @@
 		
 		 		  
 	</head>
-	<body style="height:100%;width:100%">
-		<div style="width:100%;height:100%" ng-app="OnARoll" ng-controller="OnARollController">		
-			<div style="width:100%;background-color:seashell;height:100%" ng-if="!loggedIn">
+	<body style="height:100%;width:100%" ng-app="OnARoll" ng-controller="OnARollController">
+		<!--REUSABLE NG-IF BASED DIALOG FOR POPUPS -->
+		<div style="width: 100%;height: 100%;z-index: 100;position: absolute;top: 0%;left: 0%;" ng-show="showPopup">
+			<div style="width: 100%;height: 100%;filter:blur(2px);z-index: 101;position: absolute;left: 0%;top: 0%;"></div>
+			<div style="z-index: 102;width: 80%;height: 80%;margin-left: 10%;margin-right:10%;position: absolute;top: 9%;left: 0%;border-radius: 25px;border: solid slategrey 4px; background-image: linear-gradient(white, seashell);">
+				POPUP
+			</div>
+		</div>
+		<div style="width:100%;height:100%" >			
+			<!--LOGIN PAGE -->	
+			<div style="width:100%;background-image: linear-gradient(seashell, white);height:100%" ng-if="!loggedIn">
 				<div style="position:absolute;top: 3% ;text-align:center;font-family: 'Courier New', Courier, monospace;font-size: 28pt;font-weight: 700;width:100%">On-A-Roll</div>
 				<div style="position:absolute;top: 8%;text-align: center;font-family: 'Courier New', Courier, monospace;font-size: 20pt;width:100%">Never forget the settings or film you used on your analog camera again!</div>
 				<span style="position:absolute;top: 50%;width: 100%;text-align: center;">Enter Username: <input type="text" ng-model="details.username"></span>
 				<span style="position:absolute;top: 55%;width: 100%;text-align: center;"><button ng-click="login()">Login</button></span>
 			</div>
-			<div style="width:100%;background-color:seashell;height:100%" ng-if="loggedIn">
-				Welcome : {{details.username}}
-				<div ng-repeat="(key, value) in main.rolls track by $index">
-					<span>Camera : {{key}}</span>
-					<ul>
-						<li ng-repeat="val in value track by $index">Name: {{val.name}}, Desciption: {{val.desciption}} </li>
-					</ul>
+			<!--MAIN ROLL DISPLAY PAGE -->	
+			<div style="width:100%; background-image: linear-gradient(seashell, white);height:100%;text-align: center;align-content: center;" ng-if="loggedIn" ng-show="!display.popups.display"> 
+				<span style="font-size: 24px;font-weight: 700;">Welcome! {{details.username}}</span>
+				<div style="width: 70%;padding-right: 14%;padding-left: 14%;" ng-repeat="(key, value) in main.rolls track by $index">
+					<span style="font-size: 16px;font-weight: 700;width: 100%;background-color:seashell;" ng-click="value.expand = !value.expand">Camera : {{key}} (Rolls: {{value.rolls.length}})</span>
+					<div style="width: 100%;align-content: center;text-align: center;" ng-show="value.expand">
+						<table><thead><tr style="text-align:center"><th>Name</th><th>Description</th><td>Shots:</td></tr></thead>
+							<tbody>
+								<tr ng-repeat="val in value.rolls">						
+									<td style="text-align:left">{{val.name}}</td>
+									<td style="text-align:left">{{val.description}}</td>
+									<td style="font-weight: 800;text-align:left;"><button ng-click="openShotsDialog(val._id, val.shots.shots)">SHOTS</button> ({{val.shots.shots.length}})</td>
+								</tr>
+							</tbody>
+						</table>
+						<span style="width:100%;align-content: center;text-align: center;"><button ng-click="openAddRollDialog()">Add New Roll</button></span>
+					</div>
 				</div>
 			</div>
+			
 		</div>
+		
 	</body>
 </html>
