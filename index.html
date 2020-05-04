@@ -20,23 +20,28 @@
 		
 		 		  
 	</head>
-	<body style="height:100%;width:100%" ng-app="OnARoll" ng-controller="OnARollController">
+	<body style="height:100%;width:100%;font-family: 'Courier New', Courier, monospace" ng-app="OnARoll" ng-controller="OnARollController">
 		<!--REUSABLE NG-IF BASED DIALOG FOR POPUPS -->
-		<div style="width: 100%;height: 100%;z-index: 100;position: absolute;top: 0%;left: 0%;" ng-show="showPopup">
-			<div style="z-index: 102;width: 80%;height: 80%;margin-left: 10%;margin-right:10%;position: absolute;top: 9%;left: 0%;border-radius: 25px;border: solid slategrey 4px; background-image: linear-gradient(white, seashell);">
-				POPUP
+		<div style="width: 100%;height: 100%;z-index: 100;position: absolute;top: 0%;left: 0%;" ng-show="showPopup.value">
+			<div style="z-index: 102;width: 80%;height: 80%;margin-left: 10%;margin-right:10%;position: absolute;top: 9%;left: 0%;border-radius: 2px;border: solid lightseagreen 4px; background-image: linear-gradient(snow, AliceBlue);align-content: center;">
+				<span style="position: absolute;right: 0px;text-anchor: righ;cursor: pointer;font-weight: 700;color: lightseagreen;border: solid lightseagreen 1px;" ng-click="closeDialog()">CLOSE</span>
+				<div style="width: 100%;padding-bottom: 10%;text-align: center;"><p style="font-size: 24px;">Create a New Roll</p></div>
+				<div style="width: 100%;padding-bottom: 10%;text-align: center;"><p style="font-size: 24px;">Adding Roll To:{{popups.value.AddRollDialog.info.camera}}</p></div>
+				<div style="width:100%;height:10%;padding-top:2.5%;padding-bottom:2.5%;align-content: center;">Name:<input type="text" ng-model="popups.value.AddRollDialog.info.name"></div>
+				<div style="width:100%;height:10%;padding-top:2.5%;padding-bottom:2.5%;align-content: center;">Description:<input type="text" ng-model="popups.value.AddRollDialog.info.description"></div>
+				<button ng-click="submitNewRoll()" ng-disabled="!verify('roll')">Submit</button>
 			</div>
 		</div>
-		<div style="width:100%;height:100%" ng-style="{'filter': showPopup ? 'blur(2px)' : 'none'}">			
+		<div style="width:100%;height:100%" ng-style="{'filter': showPopup.value ? 'blur(2px)' : 'none'}">			
 			<!--LOGIN PAGE -->	
-			<div style="width:100%;background-image: linear-gradient(seashell, white);height:100%" ng-if="!loggedIn">
+			<div style="width:100%;background-image: linear-gradient(AliceBlue, snow);height:100%" ng-if="!loggedIn.value">
 				<div style="position:absolute;top: 3% ;text-align:center;font-family: 'Courier New', Courier, monospace;font-size: 28pt;font-weight: 700;width:100%">On-A-Roll</div>
 				<div style="position:absolute;top: 8%;text-align: center;font-family: 'Courier New', Courier, monospace;font-size: 20pt;width:100%">Never forget the settings or film you used on your analog camera again!</div>
 				<span style="position:absolute;top: 50%;width: 100%;text-align: center;">Enter Username: <input type="text" ng-model="details.username"></span>
 				<span style="position:absolute;top: 55%;width: 100%;text-align: center;"><button ng-click="login()">Login</button></span>
 			</div>
 			<!--MAIN ROLL DISPLAY PAGE -->	
-			<div style="width:100%; background-image: linear-gradient(seashell, white);height:100%;text-align: center;align-content: center;" ng-if="loggedIn" ng-show="!display.popups.display"> 
+			<div style="width:100%; background-image: linear-gradient(AliceBlue, snow);height:100%;text-align: center;align-content: center;" ng-if="loggedIn.value"> 
 				<span style="font-size: 24px;font-weight: 700;">Welcome! {{details.username}}</span>
 				<div style="width: 70%;padding-right: 14%;padding-left: 14%;" ng-repeat="(key, value) in main.rolls track by $index">
 					<span style="font-size: 16px;font-weight: 700;width: 100%;background-color:seashell;" ng-click="value.expand = !value.expand">Camera : {{key}} (Rolls: {{value.rolls.length}})</span>
@@ -50,7 +55,7 @@
 								</tr>
 							</tbody>
 						</table>
-						<span style="width:100%;align-content: center;text-align: center;"><button ng-click="openAddRollDialog()">Add New Roll</button></span>
+						<span style="width:100%;align-content: center;text-align: center;"><button ng-click="openAddRollDialog(key)">Add New Roll</button></span>
 					</div>
 				</div>
 			</div>
