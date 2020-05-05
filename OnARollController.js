@@ -3,7 +3,7 @@ var app = angular.module('OnARoll', []);
 app.controller('OnARollController', ['$scope', '$window', '$http', function($scope, window, $http) {
 $scope.loggedIn = {value:false};
 $scope.showPopup = {value:false};
-$scope.details = {username:""};
+$scope.details = {username:"",password:""};
 $scope.popups = {
 	shotsDialog: {shots: null, show:false, rollId:null},
 	AddShotDialog: {show:false,info:{ss:"",aperture:"", iso:"",description:""}},
@@ -19,10 +19,11 @@ $scope.ssOptions = ["30s", "25s", "20s", "15s", "13s", "10s", "8s", "6s", "5s", 
 $scope.formatOptions = ["110", "APS", "135/35mm (Half Frame)", "135/35mm",  "127",  "120 (6x4.5)", "120 (6x6)", "120 (6x7)", "120 (6x8)", "120 (6x9)", "120 (6x12)", "120 (6x17)", "4x5 LF", "4x10 LF", "8x10 LF", "8x20 LF", "8x20 LF", "16x20 LF", "20x24 LF" ];
 
 $scope.login = function(){
-	if($scope.details.username != ""){
+	if($scope.details.username != "" && $scope.details.password != ""){
 		$http({
 			method: "GET",
-			url: location.origin + "/api/rolls/user/" + $scope.details.username
+			url: location.origin + "/api/user/login/" + $scope.details.username,
+			data: {pass:$scope.details.password}
 		  }).then(function(success) {
 			  console.log(success);
 			  $scope.loggedIn.value = true;

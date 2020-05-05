@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var bcrypt = require('bcrypt-nodejs');
 const PORT = process.env.PORT || 8080;
 const uri = "mongodb+srv://rollon:nollor@onaroll-vvvb0.mongodb.net/test?retryWrites=true&w=majority";
 const MongoClient = require('mongodb').MongoClient;
@@ -13,6 +14,14 @@ app.get('/OnARollController.js', function(request, resp){
 
     resp.sendFile(__dirname + '/OnARollController.js');
 });
+app.get('/OnARollLoginController.js', function(request, resp){
+
+    resp.sendFile(__dirname + '/OnARollLoginController.js');
+});
+app.get('/signup.html', function(request, resp){
+
+    resp.sendFile(__dirname + '/signup.html');
+});
 
 app.get('/info', function(request, resp){
     resp.sendFile(__dirname + '/info.html');
@@ -22,13 +31,36 @@ app.get('/info', function(request, resp){
 var api = express.Router();
 // create routes for the api section
 
+// Get all rolls from a single user after logging in
+api.get('/rolls/user/login/:user', function(req, res, next) {
+    MongoClient.connect(uri, function(err, db){
+
+      db.db("OnARoll").collection("users").findOne(
+            { name: req.params.user }, { projection: { hash: 1, cameras:0,_id:0 } },
+            function(error, result){
+                console.log(result);
+                if(bcrypt.compareSync(req.body.pass, result.hash)){
+                    db.db("OnARoll").collection("users").find(
+                        { name: req.params.user }, { projection: { rolls: 1 } })
+                        .toArray((error,result) => res.json(orderByRolls(result[0].rolls)));
+                } else {
+                    next(new Error('Incorrect Login'));
+                }
+
+            });
+
+        console.log("Suer logged on " +  req.params.user);     
+    });  
+});
+
 // Create a new user 
 api.post('/users', function(req, res) {
     // Create a new user
     var user = {
         name: req.body.name,
-        cameras: [{type: "120",make:"Pentax",model:"67", rolls:[{name:"test"}]}],
-        rolls: [{camera: "670",name:"test", description:"test description", shots:[{iso:"100", ss:"1/60", aperture:2.4, description:"test roll description"}]}]
+        cameras: [],
+        rolls: [],
+        hash: bcrypt.hash(req.body.pass, null, null)
     };
     MongoClient.connect(uri, function(err, db){
         db.db("OnARoll").collection("users").insertOne(user, function(success){

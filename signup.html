@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Film Diary</title>
+		<!-- *** Load the AngularJS libraries here. *** -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+		 
+		
+		<!-- *** Load the jQuery and jQueryUI libraries here. *** -->		
+	  	<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+		<!-- *** Load jQueryUI default CSS from Google CDN. *** -->
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
+		<!-- Load the Controller -->
+		<script src="OnARollLoginController.js"></script>
+	  
+	</head>
+	<body style="height:100%;width:100%;font-family: 'Courier New', Courier, monospace;margin: 0px;" ng-app="OnARoll" ng-controller="OnARollLoginController">
+<div style="width:100%; background-image: linear-gradient(AliceBlue, snow);height:100%;text-align: center;align-content: center;" ng-if="loggedIn.value"> 
+    <div style="width: 100%;font-size: 32px;font-weight: 700;height:5%;padding-top:2%;margin-bottom:20px;padding-bottom:2%;color: snow;background-color: lightseagreen;box-shadow: 0px 5px 10px grey;">
+        Create Account
+    </div>
+    
+    <div style="width:100%;align-content: center;text-align: center;padding-top: 20px;padding-bottom: 10px;">
+        <button style="color:lightseagreen;background-color: snow;font-weight: 700;border:1px solid lightseagreen;" ng-disabled="verifyNotEmpty()" ng-click="createAccount()">
+            Submit
+        </button>
+    </div>
+    **Username must be atleast 4 characters and passowrd must be 2
+    </div>
+    </body>
+</html>
