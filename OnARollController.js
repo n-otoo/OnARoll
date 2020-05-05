@@ -159,9 +159,12 @@ function getUpdatedShotsForRoll(username, roll){
 
 $scope.closeDialog = function(){
 	$scope.showPopup.value = false;
-	$scope.popups.AddRollDialog.show = false;
-	$scope.popups.shotsDialog.show = false;
-	$scope.popups.AddCameraDialog.show = false;
+	$scope.popups = {
+		shotsDialog: {shots: null, show:false, rollId:null},
+		AddShotDialog: {show:false,info:{ss:"",aperture:"", iso:"",description:""}},
+		AddRollDialog: {show:false, info:{name:"",description:"", camera:"",stock:""}},
+		AddCameraDialog: {show:false, cameras:null, info:{type:"",make:"", model:""}}	
+	}
 	// Reset all dialog options to null / ""
 }
 
@@ -169,18 +172,27 @@ $scope.verify = function(editElement){
 	switch(editElement) {
 		case 'roll':
 		  return $scope.popups.AddRollDialog.info.name && $scope.popups.AddRollDialog.info.stock && $scope.popups.AddRollDialog.info.camera
-		  break;
 		case 'shot':
 		  return $scope.popups.AddShotDialog.info.iso && $scope.popups.AddShotDialog.info.ss && $scope.popups.AddShotDialog.info.aperture 
-		  break;
 		case 'camera':
 		  return $scope.popups.AddCameraDialog.info.type && $scope.popups.AddCameraDialog.info.make && $scope.popups.AddCameraDialog.info.model 
-		  break;
 	  }
+}
+
+$scope.logout = function(){
+	$scope.loggedIn.value = false;
+	$scope.details.username = "";
+	$scope.details.username = "";
+    $scope.closeDialog();
+	window.location = location.origin;
 }
 
 $scope.navigateToCreateAccount = function(){
 	window.location = location.origin + "/signup.html"
+}
+
+$scope.navigateToAbout = function(){
+	window.location = location.origin + "/about.html"
 }
 
 }]);

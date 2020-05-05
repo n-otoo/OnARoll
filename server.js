@@ -27,7 +27,7 @@ app.get('/signup.html', function(request, resp){
     resp.sendFile(__dirname + '/signup.html');
 });
 
-app.get('/info', function(request, resp){
+app.get('/about.html', function(request, resp){
     resp.sendFile(__dirname + '/info.html');
 });
 
