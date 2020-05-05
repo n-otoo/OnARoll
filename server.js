@@ -55,13 +55,16 @@ api.get('/rolls/user/login/:user', function(req, res, next) {
 
 // Create a new user 
 api.post('/users', function(req, res) {
-    // Create a new user
+    // Create a new user   
     var user = {
         name: req.body.name,
         cameras: [],
-        rolls: [],
-        hash: bcrypt.hash(req.body.pass, null, null)
+        rolls: []
     };
+    bcrypt.hash(req.body.pass, null, null, function(err, hash){
+        if (err) return next(err);
+        user.hash = hash;
+    });
     MongoClient.connect(uri, function(err, db){
         db.db("OnARoll").collection("users").insertOne(user, function(success){
             res.send("User:" + req.body.name + " successfully created");
