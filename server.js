@@ -88,7 +88,7 @@ api.get('/rolls/user/:user', function(req, res) {
 api.post('/rolls/user/:user', function(req, res) {
     MongoClient.connect(uri, function(err, db){
       var roll = req.body;
-      roll._id = req.body.name + new Date().valueOf() + roll.model;
+      roll._id = req.body.name + new Date().valueOf() + roll.camera;
       roll.shots = [];
 
       // Add the new roll to the users roll collection

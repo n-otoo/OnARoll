@@ -4,12 +4,14 @@ app.controller('OnARollController', ['$scope', '$window', '$http', function($sco
 $scope.loggedIn = {value:false};
 $scope.showPopup = {value:false};
 $scope.details = {username:""};
-$scope.popups = {value: {
+$scope.popups = {
 	shotsDialog: {shots: null, show:false, rollId:null},
-	AddShotDialog: {show:false},
-	AddRollDialog: {show:false, info:{name:"",description:"", camera:""}},
-	AddCameraDialog: {show:false}	
-}}
+	AddShotDialog: {show:false,info:{ss:"",aperture:"", iso:"",description:""}},
+	AddRollDialog: {show:false, info:{name:"",description:"", camera:"",stock:""}},
+	AddCameraDialog: {show:false, info:{type:"",make:"", model:""}}	
+}
+$scope.apertureOptions = ["f/0.5", "f/0.75", "f/0.95", "f/1", "f/1.1", "f/1.2", "f/1.4", "f/1.7", "f/1.8", "f/2", "f/2.2", "f/2.4", "f/2.5", "f/2.8", "f/3.2", "f/3.3", "f/3.5", "f/4", "f/4.5", "f/4.8", "f/5.0", "f/5.6", "f/6.3", "f/6.7", "f/7.1", "f/8", "f/9", "f/9.5", "f/10", "f/11", "f/13", "f/14", "f/16", "f/18", "f/19", "f/20", "f/22", "f/25", "f/27", "f/28", "f/32", "f/36", "f/38", "f/40", "f/45", "f/50", "f/55", "f/60", "f/64", "f/72", "f/76", "f/80", "f/90"]  
+$scope.ssOptions = ["30s", "25s", "20s", "15s", "13s", "10s", "8s", "6s", "5s", "4s", "3s", "2s", "1s", "1/2", "1/4", "1/8", "1/15", "1/30", "1/60",  "1/125", "1/160", "1/180", "1/200", "1/250", "1/320", "1/350", "1/400", "1/500", "1/640", "1/750", "1/800", "1/1000", "1/1250", "1/1500", "1/1600", "1/2000", "1/2500", "1/3000", "1/3200", "1/4000", "1/5000", "1/6000", "1/6400", "1/8000", "1/10000", "1/12000", "1/12800", "1/16000"]
 
 $scope.login = function(){
 	if($scope.details.username != ""){
@@ -62,14 +64,16 @@ function mapVisibilityToRolls(rolls){
 
 $scope.openShotsDialog = function(rollId, shotsArray){
 	$scope.showPopup.value = true;
-	$scope.popups.value.shotsDialog.show = true;
-	$scope.popups.value.shotsDialog.rollId = rollId;
-	$scope.popups.value.shotsDialog.shots = shotsArray;
+	$scope.popups.shotsDialog.show = true;
+	$scope.popups.AddShotDialog.show = true;
+	$scope.popups.shotsDialog.rollId = rollId;
+	$scope.popups.shotsDialog.shots = shotsArray;
 }
 
 $scope.openAddRollDialog = function(camera){
 	$scope.showPopup.value = true;
-	$scope.popups.value.AddRollDialog.info.camera = camera;
+	$scope.popups.AddRollDialog.show = true;
+	$scope.popups.AddRollDialog.info.camera = camera;
 	console.log($scope.showPopup.value);
 	//$scope.$apply();
 }
@@ -78,7 +82,7 @@ $scope.submitNewRoll = function(){
 	$http({
 		method: "POST",
 		url: "http://localhost:8080/api/rolls/user/" + $scope.details.username,
-		data: $scope.popups.value.AddRollDialog.info
+		data: $scope.popups.AddRollDialog.info
 	  }).then(function(success) {
 		updateMainRollsView();
 		$scope.closeDialog();
@@ -88,18 +92,46 @@ $scope.submitNewRoll = function(){
 	  });
 }
 
+$scope.submitNewShot = function(){
+	$http({
+		method: "POST",
+		url: "http://localhost:8080/api/shots/roll/" + $scope.details.username + "/" + $scope.popups.shotsDialog.rollId,
+		data: $scope.popups.AddShotDialog.info
+	  }).then(function(success) {
+		getUpdatedShotsForRoll($scope.details.username, $scope.popups.shotsDialog.rollId);
+		//updateMainRollsView();
+	  },
+	  function(error) {
+		  alert(error);
+	  });
+}
+
+function getUpdatedShotsForRoll(username, roll){
+	$http({
+		method: "GET",
+		url: "http://localhost:8080/api/shots/roll/" + username + "/" + roll
+	  }).then(function(success) {
+		$scope.popups.shotsDialog.shots = success.data.rolls[0].shots;
+	  },
+	  function(error) {
+		  alert(error);
+	  });
+}
+
 $scope.closeDialog = function(){
 	$scope.showPopup.value = false;
+	$scope.popups.AddRollDialog.show = false;
+	$scope.popups.shotsDialog.show = false;
 	// Reset all dialog options to null / ""
 }
 
 $scope.verify = function(editElement){
 	switch(editElement) {
 		case 'roll':
-		  return $scope.popups.value.AddRollDialog.info.name && $scope.popups.value.AddRollDialog.info.description && $scope.popups.value.AddRollDialog.info.camera
+		  return $scope.popups.AddRollDialog.info.name && $scope.popups.AddRollDialog.info.stock && $scope.popups.AddRollDialog.info.camera
 		  break;
-		case 'camera':
-		  // code block
+		case 'shot':
+		  return $scope.popups.AddShotDialog.info.iso && $scope.popups.AddShotDialog.info.ss && $scope.popups.AddShotDialog.info.aperture 
 		  break;
 	  }
 }
