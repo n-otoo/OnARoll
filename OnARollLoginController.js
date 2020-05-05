@@ -5,11 +5,11 @@ $scope.account = {username:"",password:""};
 
 
 $scope.createAccount = function(){
-	if($scope.details.username != "" && $scope.details.password != ""){
+	if($scope.account.username != "" && $scope.account.password != ""){
 		$http({
 			method: "POST",
 			url: location.origin + "/api/users/",
-			data: {name:$scope.details.username, pass:$scope.details.password}
+			data: {name:$scope.account.username, pass:$scope.account.password}
 		  }).then(function(success) {
 			  alert("Acccount successfully created");
 			  window.open(location.origin);				  
@@ -21,7 +21,7 @@ $scope.createAccount = function(){
 }
 
 $scope.verifyNotEmpty = function(){
-	return $scope.details.username != "" && $scope.details.password != "" && $scope.details.username.length > 3 && $scope.details.username.length > 1
+	return $scope.account.username != "" && $scope.account.password != "" && $scope.account.username.length > 3 && $scope.account.password.length > 1
 }
 
 }]);
