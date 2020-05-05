@@ -179,4 +179,8 @@ $scope.verify = function(editElement){
 	  }
 }
 
+$scope.navigateToCreateAccount = function(){
+	window.location = location.origin + "/signup.html"
+}
+
 }]);

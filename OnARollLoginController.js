@@ -12,7 +12,7 @@ $scope.createAccount = function(){
 			data: {name:$scope.account.username, pass:$scope.account.password}
 		  }).then(function(success) {
 			  alert("Acccount successfully created");
-			  window.open(location.origin);				  
+			  window.location = location.origin;				  
 		  },
 		  function(error) {
 			  alert("invalid detailds")
