@@ -5,7 +5,6 @@ const PORT = process.env.PORT || 8080;
 const uri = "mongodb+srv://rollon:nollor@onaroll-vvvb0.mongodb.net/test?retryWrites=true&w=majority";
 const MongoClient = require('mongodb').MongoClient;
 
-var port = PORT;
 app.get('/', function(request, resp){
 
     resp.sendFile(__dirname + '/index.html');
@@ -167,7 +166,7 @@ app.use(bodyParser.json('application/json'));
 app.use('/api', api);
 app.listen(PORT);
 
-console.log(" Express Server running on localhost port 8080");
+console.log(" Express Server running on port" + PORT);
 
 function orderByRolls(rolls){
     rollsByCamera = {};

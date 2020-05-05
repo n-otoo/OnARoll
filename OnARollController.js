@@ -22,7 +22,7 @@ $scope.login = function(){
 	if($scope.details.username != ""){
 		$http({
 			method: "GET",
-			url: "http://localhost:8080/api/rolls/user/" + $scope.details.username
+			url: location.origin + "/api/rolls/user/" + $scope.details.username
 		  }).then(function(success) {
 			  console.log(success);
 			  $scope.loggedIn.value = true;
@@ -38,7 +38,7 @@ $scope.login = function(){
 function updateMainRollsView(){
 	$http({
 		method: "GET",
-		url: "http://localhost:8080/api/rolls/user/" + $scope.details.username
+		url: location.origin + "/api/rolls/user/" + $scope.details.username
 	  }).then(function(success) {
 		  console.log(success);
 		  $scope.main = {rolls:success.data};
@@ -70,7 +70,7 @@ function mapVisibilityToRolls(rolls){
 $scope.openAddCameraDialog = function(){
 	$http({
 		method: "GET",
-		url: "http://localhost:8080/api/users/cameras/" + $scope.details.username
+		url: location.origin + "/api/users/cameras/" + $scope.details.username
 	  }).then(function(success) {
 		$scope.showPopup.value = true;
 		$scope.popups.AddCameraDialog.show = true;
@@ -100,7 +100,7 @@ $scope.openAddRollDialog = function(camera){
 $scope.submitNewRoll = function(){
 	$http({
 		method: "POST",
-		url: "http://localhost:8080/api/rolls/user/" + $scope.details.username,
+		url: location.origin + "/api/rolls/user/" + $scope.details.username,
 		data: $scope.popups.AddRollDialog.info
 	  }).then(function(success) {
 		updateMainRollsView();
@@ -114,7 +114,7 @@ $scope.submitNewRoll = function(){
 $scope.submitNewCamera = function(){
 	$http({
 		method: "POST",
-		url: "http://localhost:8080/api/users/cameras/" + $scope.details.username,
+		url: location.origin + "api/users/cameras/" + $scope.details.username,
 		data: $scope.popups.AddCameraDialog.info
 	  }).then(function(success) {
 		$scope.openAddCameraDialog();
@@ -133,7 +133,7 @@ $scope.isPlaceholder = function(roll){
 $scope.submitNewShot = function(){
 	$http({
 		method: "POST",
-		url: "http://localhost:8080/api/shots/roll/" + $scope.details.username + "/" + $scope.popups.shotsDialog.rollId,
+		url: location.origin + "api/shots/roll/" + $scope.details.username + "/" + $scope.popups.shotsDialog.rollId,
 		data: $scope.popups.AddShotDialog.info
 	  }).then(function(success) {
 		getUpdatedShotsForRoll($scope.details.username, $scope.popups.shotsDialog.rollId);
@@ -147,7 +147,7 @@ $scope.submitNewShot = function(){
 function getUpdatedShotsForRoll(username, roll){
 	$http({
 		method: "GET",
-		url: "http://localhost:8080/api/shots/roll/" + username + "/" + roll
+		url: location.origin + "api/shots/roll/" + username + "/" + roll
 	  }).then(function(success) {
 		$scope.popups.shotsDialog.shots = success.data.rolls[0].shots;
 	  },
