@@ -21,9 +21,9 @@ $scope.formatOptions = ["110", "APS", "135/35mm (Half Frame)", "135/35mm",  "127
 $scope.login = function(){
 	if($scope.details.username != "" && $scope.details.password != ""){
 		$http({
-			method: "GET",
+			method: "POST",
 			url: location.origin + "/api/user/login/" + $scope.details.username,
-			data: {pass:$scope.details.password}
+			data: { pass: $scope.details.password }
 		  }).then(function(success) {
 			  console.log(success);
 			  $scope.loggedIn.value = true;

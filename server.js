@@ -1,6 +1,10 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({
+    extended: true
+  }));
+app.use(bodyParser.json('application/json'));
 var bcrypt = require('bcrypt-nodejs');
 const PORT = process.env.PORT || 8080;
 const uri = "mongodb+srv://rollon:nollor@onaroll-vvvb0.mongodb.net/test?retryWrites=true&w=majority";
@@ -32,23 +36,25 @@ var api = express.Router();
 // create routes for the api section
 
 // Get all rolls from a single user after logging in
-api.get('/user/login/:user', function(req, res, next) {
+api.post('/user/login/:user', function(req, res) {
+    console.log(req.body);
     MongoClient.connect(uri, function(err, db){
 
       db.db("OnARoll").collection("users").findOne(
             { name: req.params.user }, { projection: { cameras:0, _id:0, rolls:0 } },
             function(error, result){
+                
+                console.log(result.hash);
+                //console.log(bcrypt.compareSync(req.body.pass, result.hash));
                 if(bcrypt.compareSync(req.body.pass, result.hash)){
                     db.db("OnARoll").collection("users").find(
                         { name: req.params.user }, { projection: { rolls: 1 } })
                         .toArray((error,result) => res.json(orderByRolls(result[0].rolls)));
-                } else {
-                    next(new Error('Incorrect Login'));
                 }
 
             });
 
-        console.log("Suer logged on " +  req.params.user);     
+        console.log("User logged on " +  req.params.user);     
     });  
 });
 
@@ -193,10 +199,7 @@ api.post('/shots/roll/:user/:roll', function(req, res) {
 
 
 
-app.use(bodyParser.urlencoded({
-    extended: false
-  }));
-app.use(bodyParser.json('application/json'));
+
 app.use('/api', api);
 app.listen(PORT);
 
