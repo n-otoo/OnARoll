@@ -1,7 +1,7 @@
 var app = angular.module('OnARoll', []);
 
 app.controller('OnARollLoginController', ['$scope',  '$http', function($scope, $http) {
-$scope.account = {username:"",password:""};
+$scope.account = {username:"", password:""};
 
 
 $scope.createAccount = function(){
