@@ -1,8 +1,8 @@
 <!doctype html>
-<html style="height:100%">
+<html>
 	<head>
 		<meta charset="utf-8">
-		<title>35mm</title>
+		<title>Film Diary</title>
 		<!-- *** Load the AngularJS libraries here. *** -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
 		 
@@ -16,11 +16,9 @@
 
 		<!-- Load the Controller -->
 		<script src="OnARollController.js"></script>
-
-		
-		 		  
+	  
 	</head>
-	<body style="height:100%;width:100%;font-family: 'Courier New', Courier, monospace" ng-app="OnARoll" ng-controller="OnARollController">
+	<body style="height:100%;width:100%;font-family: 'Courier New', Courier, monospace;margin: 0px;" ng-app="OnARoll" ng-controller="OnARollController">
 		<!--REUSABLE NG-IF BASED DIALOG FOR POPUPS -->
 		<div style="width: 100%;height: 100%;z-index: 100;position: absolute;top: 0%;left: 0%;" ng-show="showPopup.value">
 			<!--Add/View Shots Dialog-->
@@ -54,14 +52,36 @@
 				</table>
 			</div>
 			<!--Add Camera Dialog-->
-			<div ng-if="popups.AddCameraDialog.show" style="z-index: 102;width: 80%;height: 80%;margin-left: 10%;margin-right:10%;position: absolute;top: 9%;left: 0%;border-radius: 2px;border: solid lightseagreen 4px; background-image: linear-gradient(snow, AliceBlue);align-content: center;text-align: center;">
+			<div ng-if="popups.AddCameraDialog.show" style="overflow-x: hidden;z-index: 102;width: 80%;height: 80%;margin-left: 10%;margin-right:10%;position: absolute;top: 9%;left: 0%;border-radius: 2px;border: solid lightseagreen 4px; background-image: linear-gradient(snow, AliceBlue);align-content: center;text-align: center;">
 				<span style="position: absolute;right: 0px;text-anchor: righ;cursor: pointer;font-weight: 700;color: lightseagreen;border: solid lightseagreen 1px;" ng-click="closeDialog()">CLOSE</span>
-				<div style="width: 100%;padding-bottom: 10%;text-align: center;"><p style="font-size: 24px;">Create a New Roll</p></div>
-				<div style="width: 100%;padding-bottom: 10%;text-align: center;"><p style="font-size: 24px;">Adding Roll To:{{popups.AddRollDialog.info.camera}}</p></div>
-				<div style="width:100%;height:5%;padding-top:1%;padding-bottom:1%;align-content: center;text-align: center;font-weight: 700;">Film Stock:<input style="box-sizing: border-box;border: solid lightseagreen 1.2px;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px" type="text" ng-model="popups.AddRollDialog.info.stock"></div>
-				<div style="width:100%;height:5%;padding-top:1%;padding-bottom:1%;align-content: center;text-align: center;font-weight: 700;">Name:<input style="box-sizing: border-box;border: solid lightseagreen 1.2px;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px" type="text" ng-model="popups.AddRollDialog.info.name"></div>
-				<div style="width:100%;height:5%;padding-top:1%;padding-bottom:1%;align-content: center;text-align: center;font-weight: 700;">Description:<input style="box-sizing: border-box;border: solid lightseagreen 1.2px;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px" type="text" ng-model="popups.AddRollDialog.info.description"></div>
-				<button ng-click="submitNewRoll()" ng-disabled="!verify('camera')">Submit</button>
+				<div style="width: 100%;padding-bottom: 10%;text-align: center;"><p style="font-size: 24px;">Current Cameras</p></div>
+				<div style="width: 100%;padding-bottom: 10%;text-align: center;">
+					<div style="width: 100%;border-bottom: 1px solid lightseagreen;">
+						<span style="width: 33%;float: left;color: lightseagreen;">Format</span>
+						<span style="width: 33%;float: left;color: lightseagreen;">Manufacturer</span>
+						<span style="width: 33%;float: left;color: lightseagreen;">Model</span>
+					</div>
+					<div style="width: 100%;padding-top: 5px;" ng-repeat="camera in popups.AddCameraDialog.cameras">
+						<span style="width: 33%;float: left;color: snow;background-color: lightseagreen;border-bottom: 1px solid snow;">{{camera.type}}</span>
+						<span style="width: 33%;float: left;color: snow;background-color: lightseagreen;border-bottom: 1px solid snow;">{{camera.make}}</span>
+						<span style="width: 33%;float: left;color: snow;background-color: lightseagreen;border-bottom: 1px solid snow;">{{camera.model}}</span>
+					</div>									
+				</div>
+				<div style="width: 100%;padding-bottom: 5%;padding-top:5%;text-align: center;"><p style="font-size: 24px;">Add New Camera</p></div>
+				<div style="width: 100%;padding-top: 30px;">
+					<span style="width: 33%;float: left;color: snow;background-color: lightseagreen;border-bottom: 1px solid snow;">
+						<p style="font-weight: 800;">Format:</p> <select style="color: snow;border:none;background-color: lightseagreen;padding: 10px 15px" ng-options="format for format in formatOptions track by format" style="border:none" ng-model="popups.AddCameraDialog.info.type">
+							<option value="">Select Format</option>
+						</select>
+					</span>
+					<span style="width: 33%;float: left;color: snow;background-color: lightseagreen;border-bottom: 1px solid snow;">
+						<p style="font-weight: 800;">Manufacturer:</p> <input style="margin-left:5px;box-sizing: border-box;border: solid lightseagreen 1.2px;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px" type="text" ng-model="popups.AddCameraDialog.info.make">
+					</span>
+					<span style="width: 33%;float: left;color: snow;background-color: lightseagreen;border-bottom: 1px solid snow;">
+						<p style="font-weight: 800;">Model:</p> <input style="margin-left:5px;box-sizing: border-box;border: solid lightseagreen 1.2px;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px" type="text" ng-model="popups.AddCameraDialog.info.model">
+					</span>
+				</div>
+				<button ng-click="submitNewCamera()" ng-disabled="!verify('camera')" style="margin-top:10px;color:lightseagreen;background-color: snow;font-weight: 700;border:1px solid lightseagreen;">Submit</button>
 			</div>
 			<!--Add Rolls Dialog-->
 			<div ng-if="popups.AddRollDialog.show" style="z-index: 102;width: 80%;height: 80%;margin-left: 10%;margin-right:10%;position: absolute;top: 9%;left: 0%;border-radius: 2px;border: solid lightseagreen 4px; background-image: linear-gradient(snow, AliceBlue);align-content: center;text-align: center;">
@@ -71,7 +91,7 @@
 				<div style="width:100%;height:5%;padding-top:1%;padding-bottom:1%;align-content: center;text-align: center;font-weight: 700;">Film Stock:<input style="box-sizing: border-box;border: solid lightseagreen 1.2px;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px" type="text" ng-model="popups.AddRollDialog.info.stock"></div>
 				<div style="width:100%;height:5%;padding-top:1%;padding-bottom:1%;align-content: center;text-align: center;font-weight: 700;">Name:<input style="box-sizing: border-box;border: solid lightseagreen 1.2px;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px" type="text" ng-model="popups.AddRollDialog.info.name"></div>
 				<div style="width:100%;height:5%;padding-top:1%;padding-bottom:1%;align-content: center;text-align: center;font-weight: 700;">Description:<input style="box-sizing: border-box;border: solid lightseagreen 1.2px;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px" type="text" ng-model="popups.AddRollDialog.info.description"></div>
-				<button ng-click="submitNewRoll()" ng-disabled="!verify('roll')">Submit</button>
+				<button ng-click="submitNewRoll()" ng-disabled="!verify('roll')" style="margin-top:10px;color:lightseagreen;background-color: snow;font-weight: 700;border:1px solid lightseagreen;">Submit</button>
 			</div>
 		</div>
 		<div style="width:100%;height:100%" ng-style="{'filter': showPopup.value ? 'blur(2px)' : 'none'}">			
@@ -84,26 +104,25 @@
 			</div>
 			<!--MAIN ROLL DISPLAY PAGE -->	
 			<div style="width:100%; background-image: linear-gradient(AliceBlue, snow);height:100%;text-align: center;align-content: center;" ng-if="loggedIn.value"> 
-				<span style="font-size: 24px;font-weight: 700;">Welcome! {{details.username}}</span>
+				<div style="width: 100%;font-size: 32px;font-weight: 700;height:5%;padding-top:2%;margin-bottom:20px;padding-bottom:2%;color: snow;background-color: lightseagreen;box-shadow: 0px 5px 10px grey;">Welcome! {{details.username}}</div>
 				<div style="width: 70%;padding-right: 14%;padding-left: 14%;" ng-repeat="(key, value) in main.rolls track by $index">
-					<span style="font-size: 16px;font-weight: 700;width: 100%;background-color:seashell;" ng-click="value.expand = !value.expand">Camera : {{key}} (Rolls: {{value.rolls.length}})</span>
+					<span style="font-size: 22px;font-weight: 800;width: 100%;background-color:snow;color: lightseagreen;cursor: pointer;" ng-click="value.expand = !value.expand">	⌄ Camera : {{key}} (Rolls: {{value.rolls.length - 1}}) 	⌄</span>
 					<div style="width: 100%;align-content: center;text-align: center;" ng-show="value.expand">
-						<table><thead><tr style="text-align:center"><th>Stock</th><th>Name</th><th>Description</th><th>Shots:</th></tr></thead>
+						<table style="margin: 0 auto;"><thead stye="border-bottom:2px solid lightseagreen"><tr style="text-align:center;"><th>Stock</th><th>Name</th><th>Description</th><th>Shots:</th></tr></thead>
 							<tbody>
-								<tr ng-repeat="val in value.rolls">
-									<td style="text-align:left">{{val.stock}}</td>						
-									<td style="text-align:left">{{val.name}}</td>
-									<td style="text-align:left">{{val.description}}</td>
-									<td style="font-weight: 800;text-align:left;"><button ng-click="openShotsDialog(val._id, val.shots.shots)">SHOTS</button> ({{val.shots.shots.length}})</td>
+								<tr style="border-collapse: collapse;" ng-repeat="val in value.rolls">
+									<td ng-if="!isPlaceholder(val)" style="text-align:left;padding:10px;border-right:2px solid lightseagreen">{{val.stock}}</td>						
+									<td ng-if="!isPlaceholder(val)" style="text-align:left;padding:10px;border-right:2px solid lightseagreen">{{val.name}}</td>
+									<td ng-if="!isPlaceholder(val)" style="text-align:left;padding:10px;border-right:2px solid lightseagreen">{{val.description}}</td>
+									<td ng-if="!isPlaceholder(val)" style="font-weight: 800;text-align:left;padding:10px"><button style="color:lightseagreen;background-color: snow;font-weight: 700;border:1px solid lightseagreen;" ng-click="openShotsDialog(val._id, val.shots.shots)">SHOTS</button> ({{val.shots.shots.length}})</td>
 								</tr>
 							</tbody>
 						</table>
-						<span style="width:100%;align-content: center;text-align: center;"><button ng-click="openAddRollDialog(key)">Add New Roll</button></span>
+						<div style="width:100%;align-content: center;text-align: center;padding-top: 20px;padding-bottom: 10px;"><button style="color:lightseagreen;background-color: snow;font-weight: 700;border:1px solid lightseagreen;" ng-click="openAddRollDialog(key)">Add New Roll</button></div>
 					</div>
 				</div>
+				<button ng-click="openAddCameraDialog()" style="margin-top:50px;font-weight:800;border:none;border-radius: 2px;color: snow;background-color: lightseagreen;padding: 10px 15px;cursor: pointer;">Cameras</button>
 			</div>
-			
-		</div>
-		
+		</div>		
 	</body>
 </html>

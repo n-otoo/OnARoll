@@ -67,6 +67,13 @@ api.post('/users/cameras/:user', function(req, res) {
             { $push: {cameras: camera } }, 
             function(success){
             res.send("Camera " + camera.model + " successfully created");
+            
+            // Add a palceholder roll
+            db.db("OnARoll").collection("users").update(
+        {name: req.params.user },
+        { $push: {rolls: {name:"__PLCHOLDER", camera: camera.model} } }, 
+        function(success){ console.log("Created Placeholder Roll") }); 
+            
         });
         console.log("Added camera "  + camera.model + " to user " + req.params.user);
     });
