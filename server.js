@@ -32,13 +32,12 @@ var api = express.Router();
 // create routes for the api section
 
 // Get all rolls from a single user after logging in
-api.get('/rolls/user/login/:user', function(req, res, next) {
+api.get('/user/login/:user', function(req, res, next) {
     MongoClient.connect(uri, function(err, db){
 
       db.db("OnARoll").collection("users").findOne(
-            { name: req.params.user }, { projection: { hash: 1, cameras:0,_id:0 } },
+            { name: req.params.user }, { projection: { cameras:0, _id:0, rolls:0 } },
             function(error, result){
-                console.log(result);
                 if(bcrypt.compareSync(req.body.pass, result.hash)){
                     db.db("OnARoll").collection("users").find(
                         { name: req.params.user }, { projection: { rolls: 1 } })
