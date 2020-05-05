@@ -183,7 +183,7 @@ $scope.logout = function(){
 	$scope.loggedIn.value = false;
 	$scope.details.username = "";
 	$scope.details.username = "";
-    $scope.closeDialog();
+    $ssscope.closeDialog();
 	window.location = location.origin;
 }
 

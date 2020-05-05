@@ -24,4 +24,8 @@ $scope.verifyNotEmpty = function(){
 	return $scope.account.username != "" && $scope.account.password != "" && $scope.account.username.length > 3 && $scope.account.password.length > 1
 }
 
+$scope.navigateToAbout = function(){
+	window.location = location.origin + "/about.html"
+}
+
 }]);
