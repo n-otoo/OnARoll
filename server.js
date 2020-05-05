@@ -43,14 +43,19 @@ api.post('/user/login/:user', function(req, res) {
       db.db("OnARoll").collection("users").findOne(
             { name: req.params.user }, { projection: { cameras:0, _id:0, rolls:0 } },
             function(error, result){
-                
+                if(error){
+                    res.status(404).send("Oops! Couldnt seems to find that!");
+                } else {
                 console.log(result.hash);
                 //console.log(bcrypt.compareSync(req.body.pass, result.hash));
                 if(bcrypt.compareSync(req.body.pass, result.hash)){
                     db.db("OnARoll").collection("users").find(
                         { name: req.params.user }, { projection: { rolls: 1 } })
                         .toArray((error,result) => res.json(orderByRolls(result[0].rolls)));
+                } else {
+                    res.status(404).send("Oops! Looks like the incorrect details were entered!");
                 }
+            }
 
             });
 
